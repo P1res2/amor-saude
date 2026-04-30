@@ -1,0 +1,205 @@
+"use client";
+
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  maskCPF,
+  TPaciente,
+  pacienteSchema,
+} from "@/features/paciente/validations";
+import { v4 as uuidv4 } from "uuid";
+import { createPaciente } from "@/features/paciente/actions";
+
+export function CriarPacienteForm({ className }: { className?: string }) {
+  const form = useForm<TPaciente>({
+    resolver: zodResolver(pacienteSchema),
+    defaultValues: {
+      id: uuidv4(),
+      nome: "",
+      sobrenome: "",
+      cpf: "",
+      email: "",
+      cep: "",
+    },
+  });
+
+  async function onSubmit(data: TPaciente) {
+    toast("Você enviou os seguintes valores:", {
+      description: (
+        <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
+          <code>{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+      position: "bottom-right",
+      classNames: {
+        content: "flex flex-col gap-2",
+      },
+      style: {
+        "--border-radius": "calc(var(--radius)  + 4px)",
+      } as React.CSSProperties,
+    });
+
+    await createPaciente(data);
+
+    form.reset();
+  }
+
+  return (
+    <Card className={`w-full sm:max-w-md ${className}`}>
+      <CardHeader>
+        <CardTitle>Cadastrar</CardTitle>
+        <CardDescription>Preecha para cadastrar um paciente.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            {/* Nome e Sobrenome */}
+            <div className="flex flex-row gap-4">
+              <Controller
+                name="nome"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-demo-title">Nome</FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-rhf-demo-title"
+                      aria-invalid={fieldState.invalid}
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="sobrenome"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="form-rhf-demo-title">
+                      Sobrenome
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="form-rhf-demo-title"
+                      aria-invalid={fieldState.invalid}
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+
+            {/* Email e CPF */}
+            <div className="flex flex-row gap-4">
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="email-input">Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id="email-input"
+                      aria-invalid={fieldState.invalid}
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="cpf"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="cpf-input">CPF</FieldLabel>
+                    <Input
+                      {...field}
+                      id="cpf-input"
+                      aria-invalid={fieldState.invalid}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        const maskedValue = maskCPF(e.target.value);
+                        field.onChange(maskedValue);
+                      }}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+
+            <div className="flex flex-row gap-4">
+              <Controller
+                name="cep"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="cep-input">CEP</FieldLabel>
+                    <Input
+                      {...field}
+                      id="cep-input"
+                      aria-invalid={fieldState.invalid}
+                      autoComplete="off"
+                      maxLength={9}
+                      onChange={(e) => {
+                        const cepFormatado = e.target.value.replace(
+                          /(\d{5})(\d{3})/,
+                          "$1-$2",
+                        );
+                        field.onChange(cepFormatado);
+                      }}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <div className="w-full"></div>
+            </div>
+          </FieldGroup>
+        </form>
+      </CardContent>
+      <CardFooter className="flex flex-row justify-end items-end">
+        <Field orientation="horizontal">
+          <Button type="button" variant="outline" onClick={() => form.reset()}>
+            Limpar
+          </Button>
+          <Button type="submit" form="form-rhf-demo">
+            Cadastrar
+          </Button>
+        </Field>
+      </CardFooter>
+    </Card>
+  );
+}
