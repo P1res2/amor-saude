@@ -23,8 +23,25 @@ export const pacienteColumns: ColumnDef<TPaciente>[] = [
       // Se o CPF já vier mascarado do backend, você pode só retornar o valor.
       // Se vier limpo (só números), formatamos aqui apenas para exibição visual:
       const cpf = row.getValue("cpf") as string;
-      const cpfFormatado = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+      const cpfFormatado = cpf.replace(
+        /(\d{3})(\d{3})(\d{3})(\d{2})/,
+        "$1.$2.$3-$4",
+      );
       return <span>{cpfFormatado}</span>;
+    },
+  },
+  {
+    accessorKey: "telefone",
+    header: "Telefone",
+    cell: ({ row }) => {
+      const telefone = row.getValue("telefone") as string;
+      if (telefone) {
+        const telefoneFormatado = telefone
+          .replace(/\D/g, "")
+          .replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+        return <span>{telefoneFormatado}</span>;
+      }
+      return "Nenhum";
     },
   },
   {

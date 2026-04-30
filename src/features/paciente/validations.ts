@@ -11,7 +11,8 @@ export const pacienteSchema = z.object({
       message: "CPF inválido.",
     }),
     email: z.email().nonempty("Obrigatório"),
-    cep: z.string().nonempty("Obrigatório")
+    cep: z.string().nonempty("Obrigatório"),
+    telefone: z.string().nonempty("Obrigatório")
 });
 
 export type TPaciente = z.infer<typeof pacienteSchema>;

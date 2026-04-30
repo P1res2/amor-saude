@@ -185,7 +185,32 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                   </Field>
                 )}
               />
-              <div className="w-full"></div>
+              <Controller
+                name="telefone"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="telefone-input">Telefone</FieldLabel>
+                    <Input
+                      {...field}
+                      id="telefone-input"
+                      aria-invalid={fieldState.invalid}
+                      autoComplete="off"
+                      maxLength={11}
+                      onChange={(e) => {
+                        const telefoneFormatado = e.target.value
+                          .replace(/\D/g, "")
+                          .replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+
+                        field.onChange(telefoneFormatado);
+                      }}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </div>
           </FieldGroup>
         </form>
