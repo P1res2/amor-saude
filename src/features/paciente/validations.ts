@@ -10,12 +10,30 @@ export const pacienteSchema = z.object({
     .refine((value) => validateCPF(value), {
       message: "CPF inválido.",
     }),
-    email: z.email().nonempty("Obrigatório"),
-    cep: z.string().nonempty("Obrigatório"),
-    telefone: z.string().nonempty("Obrigatório")
+  email: z.email().nonempty("Obrigatório"),
+  cep: z.string().nonempty("Obrigatório"),
+  telefone: z.string().nonempty("Obrigatório"),
+  sexo: z
+    .string()
+    .nonempty("Obirgatório")
+    .refine(
+      (value) => {
+        if (value !== "f" && value !== "m") return false;
+        return true;
+      },
+      { message: "Valor inválido" },
+    ),
 });
 
 export type TPaciente = z.infer<typeof pacienteSchema>;
+
+// 2. O que o backend retorna (Response Body)
+export const pacienteResponseSchema = pacienteSchema.extend({
+  id: z.string(),
+  cpf: z.string(),
+});
+
+export type TPacienteResponse = z.infer<typeof pacienteResponseSchema>;
 
 export const maskCPF = (value: string) => {
   return value

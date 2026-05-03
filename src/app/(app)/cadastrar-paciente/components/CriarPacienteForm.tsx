@@ -27,7 +27,16 @@ import {
   pacienteSchema,
 } from "@/features/paciente/validations";
 import { v4 as uuidv4 } from "uuid";
-import { createPaciente } from "@/features/paciente/actions";
+import { createPaciente } from "@/features/paciente/services";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function CriarPacienteForm({ className }: { className?: string }) {
   const form = useForm<TPaciente>({
@@ -39,6 +48,8 @@ export function CriarPacienteForm({ className }: { className?: string }) {
       cpf: "",
       email: "",
       cep: "",
+      telefone: "",
+      sexo: "",
     },
   });
 
@@ -84,7 +95,6 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                       {...field}
                       id="form-rhf-demo-title"
                       aria-invalid={fieldState.invalid}
-                      autoComplete="off"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -104,7 +114,6 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                       {...field}
                       id="form-rhf-demo-title"
                       aria-invalid={fieldState.invalid}
-                      autoComplete="off"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -126,7 +135,6 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                       {...field}
                       id="email-input"
                       aria-invalid={fieldState.invalid}
-                      autoComplete="off"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -144,7 +152,6 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                       {...field}
                       id="cpf-input"
                       aria-invalid={fieldState.invalid}
-                      autoComplete="off"
                       onChange={(e) => {
                         const maskedValue = maskCPF(e.target.value);
                         field.onChange(maskedValue);
@@ -169,7 +176,6 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                       {...field}
                       id="cep-input"
                       aria-invalid={fieldState.invalid}
-                      autoComplete="off"
                       maxLength={9}
                       onChange={(e) => {
                         const cepFormatado = e.target.value.replace(
@@ -195,7 +201,6 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                       {...field}
                       id="telefone-input"
                       aria-invalid={fieldState.invalid}
-                      autoComplete="off"
                       maxLength={11}
                       onChange={(e) => {
                         const telefoneFormatado = e.target.value
@@ -211,6 +216,42 @@ export function CriarPacienteForm({ className }: { className?: string }) {
                   </Field>
                 )}
               />
+            </div>
+            <div className="flex flex-row gap-4">
+              <Controller
+                name="sexo"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="sexo-input">Sexo</FieldLabel>
+
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger
+                        id="sexo-input"
+                        className="w-full max-w-48"
+                      >
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Sexo</SelectLabel>
+                          <SelectItem value="f">Feminino</SelectItem>
+                          <SelectItem value="m">Masculino</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <div className="w-full" />
             </div>
           </FieldGroup>
         </form>

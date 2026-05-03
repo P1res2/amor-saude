@@ -6,14 +6,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { pacienteColumns } from "./coloums";
 import { TPaciente } from "@/features/paciente/validations";
 
@@ -29,49 +21,61 @@ export function PacientesDataTable({ data }: PacientesDataTableProps) {
   });
 
   return (
-    <div className="rounded-md border bg-card h-[650px] w-full">
-      <Table>
-        <TableHeader>
+    /* O container controla o scroll vertical */
+    <div className="relative h-[650px] overflow-y-auto rounded-md border bg-card w-full select-none shadow-lg space-y-4">
+      {/* MUDANÇA CRUCIAL: 
+        Trocamos 'border-collapse' por 'border-separate border-spacing-0'.
+        Isso destrava o sticky header no CSS.
+      */}
+      <table className="w-full caption-bottom text-sm border-separate border-spacing-0">
+        <thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="sticky top-0 z-10 bg-card h-12 px-4 text-left align-middle font-semibold text-muted-foreground border-b border-border shadow-[0_1px_0_0_rgba(0,0,0,0.05)]"
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
           ))}
-        </TableHeader>
-        <TableBody>
+        </thead>
+        <tbody className="[&_tr:last-child_td]:border-0">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+              <tr 
+                key={row.id} 
+                className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
+                  <td key={cell.id} className="p-4 align-middle border-b border-border/50">
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
+                  </td>
                 ))}
-              </TableRow>
+              </tr>
             ))
           ) : (
-            <TableRow>
-              <TableCell colSpan={pacienteColumns.length} className="h-24 text-center text-muted-foreground">
+            <tr>
+              <td
+                colSpan={pacienteColumns.length}
+                className="h-24 text-center text-muted-foreground"
+              >
                 Nenhum paciente encontrado.
-              </TableCell>
-            </TableRow>
+              </td>
+            </tr>
           )}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     </div>
   );
 }

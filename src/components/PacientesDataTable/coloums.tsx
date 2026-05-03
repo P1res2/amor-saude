@@ -53,4 +53,14 @@ export const pacienteColumns: ColumnDef<TPaciente>[] = [
       return <span>{cepFormatado}</span>;
     },
   },
+  {
+    accessorKey: "sexo",
+    header: "Sexo",
+    cell: ({ row }) => {
+      const sexo = row.getValue("sexo") as string
+      if (sexo === "f") return <span>Feminino</span>
+      if (sexo === "m") return <span>Masculino</span>
+      return ;
+    },
+  },
 ];
