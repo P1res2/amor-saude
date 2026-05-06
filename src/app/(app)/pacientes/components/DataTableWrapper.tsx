@@ -1,5 +1,6 @@
 import { PacientesDataTable } from "@/components/PacientesDataTable/PacientesDataTable";
-import { getAllPacientes } from "@/features/paciente/services";
+import { getAllPacientes } from "@/services/pacientes";
+
 
 export async function DataTableWrapper() {
   const data = await getAllPacientes();

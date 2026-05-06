@@ -21,40 +21,42 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { LoginFormValues, loginSchema } from "@/features/auth/validations";
 import { useRouter } from "next/navigation";
+import { loginSchema, TLoginFormValues } from "../validations";
+import { login } from "../actions";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const form = useForm<LoginFormValues>({
+  const router = useRouter();
+  const form = useForm<TLoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
-  const router = useRouter();
 
-  function onSubmit(data: LoginFormValues) {
-    toast("Login attempt:", {
-      description: (
-        <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
+  const onSubmit = async (data: TLoginFormValues) => {
+    toast.promise(
+      (async () => {
+        const result = await login(data);
+
+        if (result?.error) {
+          throw new Error(result.error);
+        }
+
+        router.push("/pacientes");
+        return result;
+      })(),
+      {
+        loading: "Fazendo login...",
+        success: "Login feito com sucesso!",
+        error: (err) => err.message,
       },
-      style: {
-        "--border-radius": "calc(var(--radius) + 4px)",
-      } as React.CSSProperties,
-    });
-
-    router.push("/pacientes");
-  }
+    );
+  };
 
   return (
     <Card className={cn("w-full sm:max-w-md", className)} {...props}>

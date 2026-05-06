@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -21,13 +20,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  maskCPF,
-  TPaciente,
-  pacienteSchema,
-} from "@/features/paciente/validations";
 import { v4 as uuidv4 } from "uuid";
-import { createPaciente } from "@/features/paciente/services";
 import {
   Select,
   SelectContent,
@@ -37,6 +30,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { pacienteSchema, TPaciente } from "@/lib/models";
+import { maskCPF } from "@/lib/utils";
+import { createPaciente } from "@/services/pacientes";
 
 export function CriarPacienteForm({ className }: { className?: string }) {
   const form = useForm<TPaciente>({
@@ -54,24 +50,13 @@ export function CriarPacienteForm({ className }: { className?: string }) {
   });
 
   async function onSubmit(data: TPaciente) {
-    toast("Você enviou os seguintes valores:", {
-      description: (
-        <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
+    toast.promise(createPaciente(data), {
+      loading: "Cadastrando paciente...",
+      success: "Cadastro feito com sucesso!",
+      error: "Não foi possivel cadastrar o paciente.",
     });
-
-    await createPaciente(data);
-
-    form.reset();
+    
+    // form.reset();
   }
 
   return (
