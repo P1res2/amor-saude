@@ -24,14 +24,17 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { loginSchema, TLoginFormValues } from "../validations";
 import { login } from "../actions";
+import { Spinner } from "@/components/ui/spinner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false);
   const form = useForm<TLoginFormValues>({
     resolver: zodResolver(loginSchema),
+    disabled: loading,
     defaultValues: {
       email: "",
       password: "",
@@ -41,9 +44,11 @@ export function LoginForm({
   const onSubmit = async (data: TLoginFormValues) => {
     toast.promise(
       (async () => {
+        setLoading(true);
         const result = await login(data);
 
         if (result?.error) {
+          setLoading(false);
           throw new Error(result.error);
         }
 
@@ -107,8 +112,8 @@ export function LoginForm({
               )}
             />
             <Field>
-              <Button type="submit" className="w-full">
-                Entrar
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? <Spinner /> : "Entrar"}
               </Button>
             </Field>
           </FieldGroup>

@@ -230,16 +230,6 @@
       "cep": "05109-010",
       "telefone": "(11) 98324-7965",
       "sexo": "f"
-    },
-    {
-      "id": "cbc55716-8964-40d0-b14a-5ea9fb306d65",
-      "nome": "teste",
-      "sobrenome": "teste",
-      "cpf": "313.665.558-30",
-      "email": "gra.gg@hotmail.com",
-      "cep": "05109-010",
-      "telefone": "(11) 98324-7777",
-      "sexo": "f"
     }
   ]
 }
