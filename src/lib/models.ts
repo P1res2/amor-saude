@@ -32,12 +32,29 @@ export const usuarioSchema = z.object({
   email: z.email().nonempty("Obrigatório"),
   nome: z.string().nonempty("Obrigatório"),
   sobrenome: z.string().nonempty("Obrigatório"),
+  role: z.string().nullable,
   cpf: z
     .string()
     .nonempty("Obrigatório")
     .refine((value) => validateCPF(value), {
       message: "CPF inválido.",
-    }),
-    passwordHash: z.string()
+    })
 });
 export type TUsuario = z.infer<typeof usuarioSchema>;
+
+
+export const consultaSchema = z.object({
+  id: z.string().nonempty("Obrigatório"),
+  email: z.email().nonempty("Obrigatório"),
+  nome: z.string().nonempty("Obrigatório"),
+  sobrenome: z.string().nonempty("Obrigatório"),
+  role: z.string().nullable,
+  cpf: z
+    .string()
+    .nonempty("Obrigatório")
+    .refine((value) => validateCPF(value), {
+      message: "CPF inválido.",
+    })
+});
+export type TConsulta = z.infer<typeof usuarioSchema>;
+

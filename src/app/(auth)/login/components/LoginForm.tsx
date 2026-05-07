@@ -25,11 +25,14 @@ import { useRouter } from "next/navigation";
 import { loginSchema, TLoginFormValues } from "../validations";
 import { login } from "../actions";
 import { Spinner } from "@/components/ui/spinner";
+import { useUserStore } from "@/app/store/userStore";
+import { TUsuario } from "@/lib/models";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const setUser = useUserStore((state) => state.setUser);
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const form = useForm<TLoginFormValues>({
@@ -42,22 +45,43 @@ export function LoginForm({
   });
 
   const onSubmit = async (data: TLoginFormValues) => {
+    setLoading(true);
+
     toast.promise(
       (async () => {
-        setLoading(true);
         const result = await login(data);
 
-        if (result?.error) {
+        if (result.error) {
           setLoading(false);
           throw new Error(result.error);
         }
 
-        router.push("/pacientes");
+        // 1. Grava no estado
+        const dadosUsuario: TUsuario = {
+          id: result.id!,
+          email: result.email!,
+          nome: result.nome!,
+          sobrenome: result.sobrenome!,
+          role: result.role,
+          cpf: result.cpf!,
+        };
+
+        setUser(dadosUsuario);
+
+        // 2. Redirecionamento Direto (Evite a página /redirect)
+        // Use o dado que veio da API (result) em vez de ler da store agora,
+        // pois a store pode levar alguns milissegundos para refletir.
+        if (result.role === "admin") {
+          router.replace("/admin/pacientes");
+        } else {
+          router.replace("/paciente/consultas");
+        }
+
         return result;
       })(),
       {
         loading: "Fazendo login...",
-        success: "Login feito com sucesso!",
+        success: "Bem-vindo!",
         error: (err) => err.message,
       },
     );

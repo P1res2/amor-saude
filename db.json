@@ -7,7 +7,8 @@
       "sobrenome": "Pires Araujo",
       "cpf": "480.624.248-98",
       "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$6cYE7yz+bto87W0zz7F/Gg$c7w1ZcfzPWJLCZZKIaISA6UEcr4UOFmuS8Gy08jWqjc",
-      "sessionToken": "111111122222222222223443"
+      "sessionToken": "11ADH1GAR111AGARjhyreg122aerg2sgsgs222ARGARUKU2AGARG2SGsargs2K222gaJSrg23443",
+      "role": "admin"
     }
   ],
   "pacientes": [
@@ -213,6 +214,8 @@
     },
     {
       "id": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
+      "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$6cYE7yz+bto87W0zz7F/Gg$c7w1ZcfzPWJLCZZKIaISA6UEcr4UOFmuS8Gy08jWqjc",
+      "sessionToken": "112aacbjuilkil1211ceaa214ceaaeca5a223343ccada6443a222caecea3443",
       "nome": "Gabriel",
       "sobrenome": "Pires Araujo",
       "cpf": "480.624.248-98",
@@ -223,6 +226,8 @@
     },
     {
       "id": "f065cb76-7beb-4193-a7c4-f3564b406360",
+      "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$6cYE7yz+bto87W0zz7F/Gg$c7w1ZcfzPWJLCZZKIaISA6UEcr4UOFmuS8Gy08jWqjc",
+      "sessionToken": "112aa343fasfrvibk658jsv7jac0aiceaacca22caecea344233",
       "nome": "Laryssa",
       "sobrenome": "de Souza Echel",
       "cpf": "313.665.558-30",
@@ -230,6 +235,15 @@
       "cep": "05109-010",
       "telefone": "(11) 98324-7965",
       "sexo": "f"
+    }
+  ],
+  "consultas": [
+    {
+      "id": "55d07992-7182-4eaa-92d0-a48749627dd9",
+      "pacienteId": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
+      "medico": "Gustavo",
+      "nomeConsulta": "Raio-X",
+      "data": "2026-05-15T14:30:00Z"
     }
   ]
 }

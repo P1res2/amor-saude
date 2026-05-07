@@ -1,0 +1,7 @@
+import { deleteSessionCookie } from "@/lib/cookies"
+import { NextResponse } from "next/server";
+
+export async function GET() {
+
+  return NextResponse.json({ message: "Logout realizado" }, { status: 200 });
+}

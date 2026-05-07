@@ -2,15 +2,19 @@
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { Logo } from "./Logo";
+
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Logo } from "@/components/Logo";
+import { useUserStore } from "@/app/store/userStore";
 
 export function HeaderMenu() {
   const router = useRouter();
+  const removeUser = useUserStore((state) => state.logout);
 
   const handleLogout = async () => {
     const logoutPromise = fetch("/logout", { method: "GET" });
+    removeUser();
 
     toast.promise(logoutPromise, {
       loading: "Saindo...",
@@ -27,12 +31,12 @@ export function HeaderMenu() {
       <Logo />
       <div className="flex flex-row gap-8">
         <div>
-          <Link href={"/pacientes"}>
+          <Link href={"/admin/pacientes"}>
             <Button variant="ghost" size="default">
               Pacientes
             </Button>
           </Link>
-          <Link href={"/cadastrar-paciente"}>
+          <Link href={"/admin/cadastrar-paciente"}>
             <Button variant="ghost" size="default">
               Cadastrar Paciente
             </Button>
