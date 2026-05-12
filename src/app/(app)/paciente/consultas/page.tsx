@@ -4,7 +4,6 @@ import { DataTableWrapper } from "./components/DataTableWrapper";
 export const dynamic = "force-dynamic";
 
 export default function PacientesPage() {
-
   return (
     <div className="relative top-[100px] flex justify-center">
       <DataTableWrapper />

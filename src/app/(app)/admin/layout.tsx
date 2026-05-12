@@ -11,35 +11,25 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
-  const pathname = usePathname();
   const user = useUserStore((state) => state.user);
+  const hasHydrated = useUserStore.persist.hasHydrated();
 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkUser = () => {
-      if (!user) {
-        // Agora sim, temos certeza absoluta que ele não está no LocalStorage
-        router.replace("/login");
-      } else if (user.role !== "admin") {
-        // Se for QUALQUER coisa diferente de admin (null, "paciente", undefined)
-        router.replace("/paciente/consultas");
-      } else {
-        // É admin, libera a página!
-        setLoading(false);
-      }
-    };
-
-    checkUser();
-  }, [user, router, pathname]); // 4. Adicione o isHydrated nas dependências
-
-  // Enquanto estiver carregando ou hidratando, mostra a tela de load
-  if (loading) {
+  if (!hasHydrated) {
     return (
       <div className="h-screen flex items-center justify-center">
         Carregando...
       </div>
     );
+  }
+
+  if (!user) {
+    router.replace("/login");
+    return null;
+  }
+
+  if (user.role !== "admin") {
+    router.replace("/paciente/consultas");
+    return null;
   }
 
   return (

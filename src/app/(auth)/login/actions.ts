@@ -47,7 +47,7 @@ export async function login(data: TLoginFormValues) {
       }
 
       // criação de token de sessão e definição de cookie
-      await setSessionCookie(pacienteUser.sessionToken);
+      await setSessionCookie(pacienteUser.id);
       return {
         success: `Seja bem vindo! ${pacienteUser.nome}. Aqui estão as suas consultas`,
         id: pacienteUser.id,
@@ -69,7 +69,7 @@ export async function login(data: TLoginFormValues) {
       }
 
       // criação de token de sessão e definição de cookie
-      await setSessionCookie(user.sessionToken);
+      await setSessionCookie(user.id);
       return {
         success: `Seja bem vindo! ${user.nome}`,
         id: user.id,

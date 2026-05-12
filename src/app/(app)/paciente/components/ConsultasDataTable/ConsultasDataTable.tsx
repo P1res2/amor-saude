@@ -6,27 +6,22 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { pacienteColumns } from "./columns";
-import { TPaciente } from "@/lib/models";
+import { TConsulta } from "@/lib/models";
+import { consultaColumns } from "./columns";
 
-interface PacientesDataTableProps {
-  data: TPaciente[];
+interface ConsultasDataTableProps {
+  data: TConsulta[];
 }
 
-export function PacientesDataTable({ data }: PacientesDataTableProps) {
+export function ConsultasDataTable({ data }: ConsultasDataTableProps) {
   const table = useReactTable({
     data,
-    columns: pacienteColumns,
+    columns: consultaColumns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
-    /* O container controla o scroll vertical */
-    <div className="relative h-[650px] overflow-y-auto rounded-md border bg-card w-full select-none shadow-lg space-y-4">
-      {/* MUDANÇA CRUCIAL: 
-        Trocamos 'border-collapse' por 'border-separate border-spacing-0'.
-        Isso destrava o sticky header no CSS.
-      */}
+    <div className="relative h-[650px] overflow-y-auto rounded-md border bg-card w-full select-none shadow-lg">
       <table className="w-full caption-bottom text-sm border-separate border-spacing-0">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -40,7 +35,7 @@ export function PacientesDataTable({ data }: PacientesDataTableProps) {
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </th>
               ))}
@@ -50,16 +45,16 @@ export function PacientesDataTable({ data }: PacientesDataTableProps) {
         <tbody className="[&_tr:last-child_td]:border-0">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <tr 
-                key={row.id} 
+              <tr
+                key={row.id}
                 className="transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="p-4 align-middle border-b border-border/50">
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
+                  <td
+                    key={cell.id}
+                    className="p-4 align-middle border-b border-border/50"
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
               </tr>
@@ -67,10 +62,10 @@ export function PacientesDataTable({ data }: PacientesDataTableProps) {
           ) : (
             <tr>
               <td
-                colSpan={pacienteColumns.length}
+                colSpan={consultaColumns.length}
                 className="h-24 text-center text-muted-foreground"
               >
-                Nenhum paciente encontrado.
+                Nenhuma consulta encontrada.
               </td>
             </tr>
           )}

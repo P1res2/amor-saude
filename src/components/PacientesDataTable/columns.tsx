@@ -1,6 +1,6 @@
 "use client";
 
-import { TPaciente } from "@/features/paciente/validations";
+import { TPaciente } from "@/lib/models";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const pacienteColumns: ColumnDef<TPaciente>[] = [

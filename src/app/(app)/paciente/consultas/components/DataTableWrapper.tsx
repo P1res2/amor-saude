@@ -1,8 +1,11 @@
-import { PacientesDataTable } from "@/components/PacientesDataTable/PacientesDataTable";
-import { TPaciente } from "@/lib/models";
 import { getAllConsultasByPacienteId } from "@/services/consultas";
+import { cookies } from "next/headers";
+import { ConsultasDataTable } from "../../components/ConsultasDataTable/ConsultasDataTable";
 
 export async function DataTableWrapper() {
-  const data = await getAllConsultasByPacienteId("");
-  return <PacientesDataTable data={[] as TPaciente[]} />;
+  const cookieStore = await cookies();
+  const userData = cookieStore.get("session_token");
+  const userId = userData?.value || "";
+  const data = await getAllConsultasByPacienteId(userId);
+  return <ConsultasDataTable data={data} />;
 }

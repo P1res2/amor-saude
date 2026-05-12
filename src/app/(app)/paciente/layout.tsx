@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useUserStore } from "@/app/store/userStore";
 import { HeaderMenu } from "./components/HeaderMenu";
 
@@ -11,34 +10,25 @@ export default function PacienteLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const pathname = usePathname(); // Para saber onde o usuário está
   const user = useUserStore((state) => state.user);
-  const [loading, setLoading] = useState(true);
+  const hasHydrated = useUserStore.persist.hasHydrated();
 
-  useEffect(() => {
-    // 1. Pequeno delay para garantir que o Zustand leu o localStorage
-    // No Next.js, o componente monta antes da hidratação do persist terminar às vezes
-    const checkUser = () => {
-      if (!user) {
-        router.replace("/login");
-      } else if (user.role === "admin") {
-        // Se for admin tentando acessar área de paciente, manda pro admin
-        router.replace("/admin/pacientes");
-      } else {
-        setLoading(false); // Só para de carregar se ele estiver no lugar certo
-      }
-    };
-
-    checkUser();
-  }, [user, router, pathname]);
-
-  // Enquanto verifica o usuário ou carrega o storage, não mostra nada (ou um spinner)
-  if (loading) {
+  if (!hasHydrated) {
     return (
       <div className="h-screen flex items-center justify-center">
         Carregando...
       </div>
     );
+  }
+
+  if (!user) {
+    router.replace("/login");
+    return null;
+  }
+
+  if (user.role === "admin") {
+    router.replace("/admin/pacientes");
+    return null;
   }
 
   return (

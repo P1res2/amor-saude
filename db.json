@@ -215,7 +215,6 @@
     {
       "id": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
       "passwordHash": "$argon2id$v=19$m=19456,t=2,p=1$6cYE7yz+bto87W0zz7F/Gg$c7w1ZcfzPWJLCZZKIaISA6UEcr4UOFmuS8Gy08jWqjc",
-      "sessionToken": "112aacbjuilkil1211ceaa214ceaaeca5a223343ccada6443a222caecea3443",
       "nome": "Gabriel",
       "sobrenome": "Pires Araujo",
       "cpf": "480.624.248-98",
@@ -243,7 +242,27 @@
       "pacienteId": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
       "medico": "Gustavo",
       "nomeConsulta": "Raio-X",
-      "data": "2026-05-15T14:30:00Z"
+      "status": "concluida",
+      "data": "2026-05-15T14:30:00Z",
+      "EspecialidadeMedico": "dermatologista"
+    },
+    {
+      "id": "e82cea1e-cb31-4683-8536-e594b0111d6c",
+      "pacienteId": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
+      "UsuarioId": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
+      "data": "2026-05-12T17:00:00.000Z",
+      "observacoes": "Dor de barriga",
+      "status": "agendada",
+      "EspecialidadeMedico": "clinico_geral"
+    },
+    {
+      "id": "bf5742f6-362d-4b07-b4c4-40991b5c8da3",
+      "pacienteId": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
+      "UsuarioId": "e4229fbc-ee30-4bd8-9bd9-f0e28a260400",
+      "data": "2026-05-17T14:05:05.529Z",
+      "observacoes": null,
+      "status": "cancelada",
+      "EspecialidadeMedico": "oftalmologista"
     }
   ]
 }

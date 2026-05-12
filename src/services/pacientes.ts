@@ -20,7 +20,7 @@ export async function createPaciente(novoPaciente: TPaciente): Promise<TPaciente
     throw new Error("O servidor salvou o registro, mas retornou dados inválidos.");
   }
 
-  revalidatePath("/pacientes");
+  revalidatePath("/admin/pacientes");
   return parsedResponse.data;
 }
 
